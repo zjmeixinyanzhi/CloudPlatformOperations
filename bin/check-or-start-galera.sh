@@ -3,6 +3,19 @@
 STOP_ARR=();
 UUID=$(uuidgen)
 rm -rf /tmp/GTID_*
+
+findBootstrapNode(){
+  for host in $(cat /tmp/GTID_${UUID}|grep "\-1"|awk '{print $2}')
+  do
+    VIEW_ID=$(ssh ${host} cat /var/lib/mysql/gvwstate.dat|grep view_id|awk '{print $3}')
+    MY_UUID=$(ssh ${host} cat /var/lib/mysql/gvwstate.dat|grep my_uuid|awk '{print $2}')
+    if [ $VIEW_ID = $MY_UUID  ];then
+       echo $host
+       break
+    fi
+  done
+}
+
 ### 1. Check mariadb service in every nodes
 for i in 01 02 03;
 do
@@ -22,7 +35,6 @@ do
 done
 ### 2. Recover Galera Cluster
 let CLUSTER_SIZE=3-${#STOP_ARR[@]}
-echo $CLUSTER_SIZE
 if [ "${CLUSTER_SIZE}" = "3" ]; then
   echo "Galera is OK!"
 elif [ "$CLUSTER_SIZE" = "2" -o "$CLUSTER_SIZE" = "1" ];then
@@ -46,9 +58,10 @@ elif [ "${CLUSTER_SIZE}" = "0" ]; then
     echo "One node disappear in Galera Cluster! Two nodes are gracefully stopped!"
   elif [ "$ABNORMAL_SIZE" = "2" ];then
     echo "Two nodes disappear in Galera Cluster! One node is gracefully stopped!"
+    BOOTSTARP_NODE=$(findBootstrapNode)
   elif [ "$ABNORMAL_SIZE" = "3" ];then
-    BOOTSTARP_NODE=$(cat /tmp/GTID_$UUID|grep "\-1"|awk '{print $2}')
     echo "All nodes went down without proper shutdown procedure!"
+    BOOTSTARP_NODE=$(findBootstrapNode)
   else
    echo "No grastate.dat or gvwstate.dat file!"
    exit 127 
