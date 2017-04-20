@@ -1,0 +1,12 @@
+[Unit]
+Description=The Cloud Service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/root/CloudPlatformOperations/bin/start-all.sh
+ExecReload=/root/CloudPlatformOperations/bin/restart-all.sh
+ExecStop=/root/CloudPlatformOperations/bin/stop-all.sh
+
+[Install]
+WantedBy=multi-user.target
