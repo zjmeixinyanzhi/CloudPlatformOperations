@@ -1,12 +1,14 @@
 #!/bin/sh
-find(){
- for host in $(cat /tmp/GTID_16bc90ec-be73-4149-b14f-119d4bd807dc|grep "\-1"|awk '{print $2}')
- do 
-    VIEW_ID=$(ssh ${host} cat /var/lib/mysql/gvwstate.dat|grep view_id|awk '{print $3}')
-    MY_UUID=$(ssh ${host} cat /var/lib/mysql/gvwstate.dat|grep my_uuid|awk '{print $2}')
-    if [ $VIEW_ID = $MY_UUID  ];then
-       echo $host
-    fi
- done
+WHILE_FLAG=0
+
+wait_start(){
+  while [ $WHILE_FLAG -lt 20 ]
+  do
+    echo -ne "=>\033[s" 
+    echo -ne "\033[40;-20H"$((WHILE_FLAG*5*100/100))%"\033[u\033[1D" 
+    let WHILE_FLAG++
+    sleep 2
+  done
 }
-ssh $(find) pwd
+echo "Wait All Pcs Resource Start"
+wait_start

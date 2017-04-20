@@ -1,28 +1,24 @@
 #!/bin/sh
+
+check_status(){
+  if [ $? != "0" ];then
+    exit 127
+  fi
+}
 ### [Rabbitmq]
-ssh controller02 systemctl stop rabbitmq-server
-ssh controller01 systemctl stop rabbitmq-server
-ssh controller03 systemctl stop rabbitmq-server
-ssh controller01 systemctl start rabbitmq-server
-ssh controller03 systemctl start rabbitmq-server
-ssh controller02 systemctl start rabbitmq-server
-
+./check-or-restart-rabbitmq-cluster.sh
+check_status
 ### [Galera]
-ssh controller01 galera_new_cluster
-ssh controller02 systemctl start mariadb
-ssh controller03 systemctl start mariadb
-
+./check-or-recover-galera.sh
+check_status
 ### [Pcs cluster]
 ### 1 controllers
-pcs cluster start --all
-pcs resource|grep Stopped|wc -l
+./check-or-restart-controller-pcs-cluster.sh
+check_status
 ### 2 networker
-ssh network01 pcs cluster start --all
-pcs resource|grep Stopped|wc -l
-
+./check-or-restart-networker-pcs-cluster.sh
+check_status
 ### [Ceph-rest-api]
-
-
 
 ### [Update VMs status]
 
