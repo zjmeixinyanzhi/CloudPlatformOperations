@@ -1,5 +1,5 @@
 #!/bin/sh
-. ../0-set-config.sh
+source /root/CloudPlatformOperations/0-set-config.sh
 STOP_NODES=();
 UUID=$(uuidgen)
 rm -rf /tmp/GTID_*

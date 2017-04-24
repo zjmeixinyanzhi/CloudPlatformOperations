@@ -1,5 +1,5 @@
 #!/bin/sh
-. ../0-set-config.sh
+source /root/CloudPlatformOperations/0-set-config.sh
 echo "[INFO] Start openstack service in compute nodes!"
 for ((i=0; i<${#hypervisor_map[@]}; i+=1));
 do
