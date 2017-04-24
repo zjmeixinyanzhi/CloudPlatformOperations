@@ -1,8 +1,11 @@
 #!/bin/sh
 . ~/keystonerc_admin
-## Get VMs old status
+. ../0-set-config.sh
+### Get VMs old status
+sed -i -e 's/^database_host.*/database_host = "'"$virtual_ip"'"/' retrieve_instances_status.py
+sed -i -e 's/^database_password.*/database_password = "'"$password_galera_root"'"/' retrieve_instances_status.py
 python retrieve_instances_status.py > server-status.dat
-
+### check and resume
 for line in `cat server-status.dat`
 do
   ID=$(echo $line|awk -F: '{print $1}')

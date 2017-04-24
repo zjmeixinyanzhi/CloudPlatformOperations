@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import MySQLdb
-database_host = '192.168.2.241'
+database_host = "192.168.2.241"
 database_name = 'cloud'
 database_username = 'root'
-database_password = 'a263f6a89fa2'
+database_password = "a263f6a89fa2"
 conn= MySQLdb.connect(host = database_host, db = database_name, user = database_username, passwd = database_password, port = 3306, charset = 'utf8')
 cursor = conn.cursor()
 cursor.execute('SELECT * FROM cloud.virtual_machine')

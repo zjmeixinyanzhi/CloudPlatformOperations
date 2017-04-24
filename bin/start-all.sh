@@ -28,5 +28,6 @@ check_status
 /root/CloudPlatformOperations/bin/ceph-rest-api-start.sh
 check_status
 ### [Update VMs status]
-
+/root/CloudPlatformOperations/bin/resume_instances_status.sh
 ### [Cloud Portal]
+/opt/apache-tomcat-7.0.68/bin/startup.sh
