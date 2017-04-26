@@ -5,7 +5,7 @@
 关闭云平台服务，所有节点关机、重启操作
   # cd /root/CloudPlatformOperations/bin
   # ./stop-all.sh
-安装字符提示，确认云平台关闭，关机、重启操作即可。
+按照字符提示，确认云平台关闭，关机、重启操作即可。
 
 启动云平台操作
   # cd /root/CloudPlatformOperations/bin
