@@ -14,13 +14,15 @@ do
   echo "$ip" >> hosts/controllers.txt
 done;
 
-for ((i=0; i<${#networker_map[@]}; i+=1));
-do
-  name=${networker_name[$i]};
-  ip=${networker_map[$name]};
-  echo "$ip" >> hosts/nodes.txt
-  echo "$ip" >> hosts/networkers.txt
-done;
+if [[ "$networker_split" = "yes" ]];then
+  for ((i=0; i<${#networker_map[@]}; i+=1));
+  do
+    name=${networker_name[$i]};
+    ip=${networker_map[$name]};
+    echo "$ip" >> hosts/nodes.txt
+    echo "$ip" >> hosts/networkers.txt
+  done;
+fi
 
 for ((i=0; i<${#hypervisor_map[@]}; i+=1));
 do
